@@ -1,12 +1,13 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 require('dotenv').config();
-
+const Taskroutes =require('./Routes/Taskroutes');
+const cors =require('cors');
 const app = express();
 
-app.get("/",(req,res) => {
-    res.send("Hello ");
-});
+// app.get("/",(req,res) => {
+//     res.send("Hello ");
+// });
 
 //middleware
 app.use((req,res,next) =>{
@@ -14,6 +15,8 @@ app.use((req,res,next) =>{
     next();
 });
 
+app.use(express.json());
+app.use(cors());
 
 mongoose.connect(process.env.MONGO_URI).then(()=>{
         app.listen(process.env.PORT,() =>{
@@ -22,3 +25,5 @@ mongoose.connect(process.env.MONGO_URI).then(()=>{
  }).catch((error)=>console.log(error));
 
 
+
+app.use('/api/tasks', Taskroutes);
